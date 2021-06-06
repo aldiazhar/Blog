@@ -18,6 +18,7 @@ Systems Anda harus memenuhi kriteria ini:
 - Masuk ke step **Konfigurasi File .env**
 - Kemudian ketikan perintah **php artisan migrate**
 - Setelah itu ketikan perintah **php artisan db:seed**
+- Setelah itu ketikan perintah **php artisan storage:link**
 - Dan terakhir keitkan perintah **php artisan serve** untuk menjalankan web apps. Buka browser dan masuk ke url http://localhost:8000
 - Masuk ke step **Akses**
 
