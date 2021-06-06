@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>ESHA Development | @yield('title')</title>
+  <title>@yield('title')</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -25,6 +25,11 @@
   <!-- AdminLTE for demo purposes -->
   <script src="{{url('asset/dist/js/demo.js')}}"></script>
 
+  <style type="text/css">
+    body {
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -35,26 +40,7 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{ url('/admin') }}" class="nav-link">Home</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{ url('/') }}" class="nav-link">View Site</a>
-      </li>
     </ul>
-
-    <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
-      <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-        <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
-    </form>
-
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <li class="nav-item dropdown">
@@ -62,6 +48,12 @@
           {{ Auth::user()->name }} <span class="caret"></span>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{{ route('dashboard') }}">
+              Dashboard
+          </a>
+          <a class="dropdown-item" href="/">
+              Site
+          </a>
           <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             {{ __('Logout') }}
           </a>
@@ -82,7 +74,7 @@
            alt="AdminLTE Logo"
            class="brand-image img-circle elevation-3"
            style="opacity: .8">
-      <span class="brand-text font-weight-light">ESHA Development</span>
+      <span class="brand-text font-weight-light">Blog App</span>
     </a>
 
     <!-- Sidebar -->
@@ -93,7 +85,7 @@
           <img src="{{url('asset/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">{{ Auth::user()->name }}</a>
         </div>
       </div>
 
@@ -102,51 +94,41 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           
           <li class="nav-item">
-            <a href="{{ url('/admin') }}" class="nav-link">
+            <a href="{{ route('dashboard') }}" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p class="text">Dashboard</p>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="{{ route('users.index') }}" class="nav-link">
-              <i class="nav-icon fas fa-user"></i>
-              <p class="text">User Management</p>
-            </a>
-          </li>
+          @if(auth()->check() && auth()->user()->hasRole('super-admin'))
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Content Management
+                User Management
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/layout/top-nav.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Blog</p>
+                <a href="{{ route('user.index') }}" class="nav-link">
+                  <i class="nav-icon fas fa-user"></i>
+                  <p class="text">User</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Gallery</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/layout/boxed.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>About</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/layout/fixed-sidebar.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Contact</p>
+                <a href="{{ route('role.index') }}" class="nav-link">
+                  <i class="nav-icon fas fa-list"></i>
+                  <p class="text">Role</p>
                 </a>
               </li>
             </ul>
+          </li>
+          @endif
+          <li class="nav-item">
+            <a href="{{ route('blog.index') }}" class="nav-link">
+              <i class="nav-icon fas fa-book"></i>
+              <p class="text">Blog</p>
+            </a>
           </li>
         </ul>
       </nav>
@@ -169,7 +151,7 @@
     <div class="float-right d-none d-sm-block">
       
     </div>
-    <strong>Copyright &copy; 2020 <a href="#">ESHA Development</a>.</strong> All rights
+    <strong>Copyright &copy; 2020 <a href="#">Blog Apps</a>.</strong> All rights
     reserved.
   </footer>
 </div>

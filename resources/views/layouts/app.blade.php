@@ -18,6 +18,16 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <script src="{{url('asset/plugins/jquery/jquery.min.js')}}"></script>
+    <style type="text/css">
+        .nav-blog {
+            color:#333;
+        }
+
+        .nav-blog:hover {
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -26,6 +36,17 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
+                <form action="{{ route('search')}}" method="get" enctype="multipart/form-data" class="form-inline ml-3">
+                    @csrf
+                  <div class="input-group input-group-sm">
+                    <input class="form-control form-control-navbar" type="search" name="search" placeholder="Search title" aria-label="Search">
+                    <div class="input-group-append">
+                      <button class="btn btn-navbar" type="submit">
+                        Search
+                      </button>
+                    </div>
+                  </div>
+                </form>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -55,12 +76,12 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    @can('read')
-                                    <a class="dropdown-item" href="{{ route('users.index') }}">
-                                        User Management
+                                    @if(auth()->check() && !auth()->user()->hasRole('tamu'))
+                                    <a class="dropdown-item" href="{{ route('dashboard') }}">
+                                        Dashboard
                                     </a>
                                     <hr>
-                                    @endcan
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -79,6 +100,9 @@
         </nav>
 
         <main class="py-4">
+            <div class="container-fluid pt-2">
+                @include('notif.message')
+            </div>
             @yield('content')
         </main>
     </div>

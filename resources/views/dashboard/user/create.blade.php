@@ -1,4 +1,4 @@
-@extends('admin.layouts.master')
+@extends('dashboard.layouts.master')
 
 @section('title', 'Create User')
 
@@ -11,8 +11,8 @@
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="{{ url('/admin') }}">Home</a></li>
-            <li class="breadcrumb-item active"><a href="{{ route('users.index') }}">User</a></li>
+            <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+            <li class="breadcrumb-item active"><a href="{{ route('user.index') }}">User</a></li>
             <li class="breadcrumb-item active">Create</li>
           </ol>
         </div>
@@ -30,7 +30,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <form method="POST" action="{{route('users.store')}}">
+              <form method="post" action="{{route('user.store')}}">
                 @csrf
                 <div class="form-group row">
                   <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
@@ -70,8 +70,19 @@
                   <div class="col-md-6">
                     @foreach($roles as $role)
                       <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="{{$role->id}}" name="roles[]" value="{{$role->id}}">
-                        <label class="form-check-label">{{$role->role_name}}</label>
+                        <input type="checkbox" class="form-check-input" id="{{$role->id}}" name="roles[]" value="{{$role->id}}" required>
+                        <label class="form-check-label">{{$role->name}}</label>
+                      </div>
+                    @endforeach
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="roles" class="col-md-4 col-form-label text-md-right">Permissions</label>
+                  <div class="col-md-6">
+                    @foreach($permissions as $permission)
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="{{$permission->id}}" name="permissions[]" value="{{$permission->id}}" required>
+                        <label class="form-check-label">{{$permission->name}}</label>
                       </div>
                     @endforeach
                   </div>

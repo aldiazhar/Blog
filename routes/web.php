@@ -13,22 +13,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', 'HomeController@index');
+Route::get('/blog/{slug}', 'HomeController@details')->name('details');
+Route::post('/comment-save', 'HomeController@commentSave')->name('comment-save');
+Route::get('/search', 'HomeController@search')->name('search');
+Route::get('/search/sorting', 'HomeController@searchSorting')->name('search-sorting');
+
+Auth::routes([
+	'reset' => false,
+	'verify' => false,
+]);
+
+Route::group(['prefix' => 'dashboard'], function () {
+	Route::get('/', 'Dashboard\DashboardController@index')->name('dashboard');
+	
+	Route::resource('/blog','Dashboard\BlogController');
+	Route::put('/blog/update-status/{blog}', 'Dashboard\BlogController@updateStatus')->name('blog.update-status');
+	Route::get('/blog/comments/{blog}', 'Dashboard\BlogController@comments')->name('blog.comments');
+	Route::put('/blog/comments/accept/{blog}', 'Dashboard\BlogController@commentsAccept')->name('blog.comments.accept');
+	Route::delete('/blog/comments/delete/{blog}', 'Dashboard\BlogController@commentsDelete')->name('blog.comments.delete');
+
+	Route::resource('/role','Dashboard\RoleController');
+	
+	Route::resource('/user','Dashboard\UserController');
 });
 
-Auth::routes();
-// Route::get('/', 'HomeController@index');
-Route::get('/home', 'HomeController@index')->name('home');
-
-// User Controller
-Route::namespace('admin')->prefix('admin')->middleware('can:read')->group(function(){
-	Route::get('/', 'adminController@index')->name('admin.index');
-
-	Route::get('/users', 'userController@index')->name('users.index');
-	Route::get('/users/create', 'userController@create')->name('users.create');
-	Route::match(['GET','POST'],'/users/store', 'userController@store')->name('users.store');
-	Route::get('/users/edit/{user}', 'userController@edit');
-	Route::match(['GET','POST'], '/users/update/{user}', 'userController@update');
-	Route::match(['GET','POST'], '/users/delete/{user}', 'userController@destroy');
-});
+//['middleware' => 'role:super-admin']
